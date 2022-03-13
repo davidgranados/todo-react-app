@@ -6,6 +6,8 @@
     "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "^12.1.4",
     "@testing-library/user-event": "^13.5.0",
+    "classnames": "^2.3.1",
+    "prop-types": "^15.8.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-scripts": "5.0.0",
@@ -15,7 +17,19 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint:css:fix": "npm run lint:css:prettier:fix && npm run lint:css:stylelint:fix",
+    "lint:css:prettier:fix": "npm run lint:css:prettier --write",
+    "lint:css:prettier": "prettier '**/*.css' --list-different --ignore-path .gitignore",
+    "lint:css:stylelint:fix": "npm run lint:css:stylelint --fix",
+    "lint:css:stylelint": "stylelint '**/*.css' --ignore-path .gitignore",
+    "lint:css": "run-s lint:css:stylelint lint:css:prettier",
+    "lint:fix": "run-p lint:js:fix lint:json:fix lint:css:fix",
+    "lint:js:fix": "npm run lint:js --fix",
+    "lint:js": "eslint --cache --ignore-path .gitignore '**/*.js'",
+    "lint:json:fix": "npm run lint:json --write",
+    "lint:json": "prettier '**/*.json' --list-different --ignore-path .gitignore",
+    "lint": "run-p lint:js lint:json lint:css"
   },
   "eslintConfig": {
     "extends": [
@@ -34,5 +48,17 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "eslint": "^8.11.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.29.3",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.5.1",
+    "stylelint": "^14.5.3",
+    "stylelint-config-idiomatic-order": "^8.1.0",
+    "stylelint-config-prettier": "^9.0.3",
+    "stylelint-prettier": "^2.0.0"
   }
 }
