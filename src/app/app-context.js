@@ -28,6 +28,15 @@ const TodoProvider = ({ children }) => {
     )
   }
 
+  const handleAddTodo = (text) => {
+    const newTodos = [...todos]
+    newTodos.push({
+      text,
+      completed: false,
+    })
+    saveTodos(newTodos)
+  }
+
   const handleCheckTodo = (text) => {
     const todoIndex = todos.findIndex((todo) => todo.text === text)
     const newTodos = [...todos]
@@ -53,6 +62,7 @@ const TodoProvider = ({ children }) => {
         completedTodos,
         totalTodos,
         searchedTodos,
+        handleAddTodo,
         handleCheckTodo,
         handleDeleteTodo,
         openModal,

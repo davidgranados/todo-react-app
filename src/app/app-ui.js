@@ -7,14 +7,28 @@ import { Modal } from '../modal'
 
 import { TodoContext } from './app-context'
 import { useContext } from 'react'
+import { TodoForm } from '../todo-form'
 
 const AppUI = () => {
   console.log('🚀 ~ file: AppUI.js ~ line 10', 'render app-ui')
-  const { error, loading, searchedTodos, openModal, setOpenModal } =
-    useContext(TodoContext)
+  const {
+    error,
+    loading,
+    searchedTodos,
+    openModal,
+    setOpenModal,
+    handleAddTodo,
+  } = useContext(TodoContext)
 
   const handleCreateButtonClick = () => {
     setOpenModal((prevState) => !prevState)
+  }
+  const handleFormSubmit = (values) => {
+    handleAddTodo(values.todoText)
+    setOpenModal(false)
+  }
+  const handleFormCancelButtonClick = () => {
+    setOpenModal(false)
   }
   return (
     <>
@@ -33,7 +47,14 @@ const AppUI = () => {
         ))}
       </TodoList>
       <CreateTodoButton onClick={handleCreateButtonClick} />
-      {openModal && <Modal>{searchedTodos[0]?.text}</Modal>}
+      {openModal && (
+        <Modal>
+          <TodoForm
+            onSubmit={handleFormSubmit}
+            onClickCancelButton={handleFormCancelButtonClick}
+          />
+        </Modal>
+      )}
     </>
   )
 }
