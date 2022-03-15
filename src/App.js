@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 import { TodoCounter } from './todo-counter'
 import { TodoSearch } from './todo-search'
@@ -13,31 +13,51 @@ import { CreateTodoButton } from './create-todo-button'
 // ]
 
 function useLocalStorage(itemName, initialValue) {
-  const localStorageItem = localStorage.getItem(itemName)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+  const [item, setItem] = useState(initialValue)
 
-  let parsedItem
+  useEffect(() => {
+    try {
+      setTimeout(() => {}, 1000)
+      const localStorageItem = localStorage.getItem(itemName)
 
-  if (!localStorageItem) {
-    localStorage.setItem(itemName, JSON.stringify(initialValue))
-    parsedItem = []
-  } else {
-    parsedItem = JSON.parse(localStorageItem)
-  }
+      let parsedItem
 
-  const [item, setItem] = useState(parsedItem)
+      if (!localStorageItem) {
+        localStorage.setItem(itemName, JSON.stringify(initialValue))
+        parsedItem = []
+      } else {
+        parsedItem = JSON.parse(localStorageItem)
+      }
+      setItem(parsedItem)
+      setLoading(false)
+    } catch (error) {
+      setError(error)
+    }
+  }, [])
 
   const saveItem = (newItem) => {
-    localStorage.setItem(itemName, JSON.stringify(newItem))
-    setItem(newItem)
+    try {
+      localStorage.setItem(itemName, JSON.stringify(newItem))
+      setItem(newItem)
+    } catch (error) {
+      setError(error)
+    }
   }
 
-  return [item, saveItem]
+  return { item, saveItem, loading, error }
 }
 
 function App() {
-  console.log('🚀 ~ file: App.js ~ line 16', 'render app')
+  console.log('🚀 ~ file: App.js ~ line 38', 'render app')
 
-  const [todos, saveTodos] = useLocalStorage('TODOS_V1', [])
+  const {
+    item: todos,
+    saveItem: saveTodos,
+    loading,
+    error,
+  } = useLocalStorage('TODOS_V1', [])
 
   const [query, setQuery] = useState('')
 
@@ -67,12 +87,21 @@ function App() {
     saveTodos(newTodos)
   }
 
+  console.log('🚀 ~ file: App.js ~ line 70', 'before use effect')
+  useEffect(() => {
+    console.log('🚀 ~ file: App.js ~ line 72', 'use effect')
+  }, [totalTodos])
+  console.log('🚀 ~ file: App.js', 'after use effect')
+
   return (
     <>
       <TodoCounter total={totalTodos} completed={completedTodos} />
       <TodoSearch query={query} setQuery={setQuery} />
 
       <TodoList>
+        {error && <p>oops!...</p>}
+        {loading && <p>Loading...</p>}
+        {!loading && !searchedTodos.length && <p>Crea tu primer todo</p>}
         {searchedTodos.map((todo) => (
           <TodoItem
             key={todo.text}
