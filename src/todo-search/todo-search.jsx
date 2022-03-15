@@ -1,14 +1,14 @@
+import { useContext } from 'react'
 import PropTypes from 'prop-types'
+
+import { TodoContext } from '../app/app-context'
 
 import styles from './todo-search.module.css'
 
-const TodoSearch = ({ setQuery, query = '', placeholder = 'cebolla' }) => {
+const TodoSearch = ({ placeholder = 'cebolla' }) => {
   console.log('🚀 ~ file: todo-search.jsx ~ line 6', 'Render TodoSearch')
+  const { query, setQuery } = useContext(TodoContext)
   const handleChange = (event) => {
-    console.log(
-      '🚀 ~ file: todo-search.jsx ~ line 12 ~ handleChange ~ event.target.value',
-      event.target.value
-    )
     setQuery(event.target.value)
   }
   return (
@@ -23,8 +23,6 @@ const TodoSearch = ({ setQuery, query = '', placeholder = 'cebolla' }) => {
 }
 
 TodoSearch.propTypes = {
-  setQuery: PropTypes.func.isRequired,
-  query: PropTypes.string,
   placeholder: PropTypes.string,
 }
 
