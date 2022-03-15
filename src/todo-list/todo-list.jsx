@@ -1,9 +1,9 @@
 import styles from './todo-list.module.css'
 import PropTypes from 'prop-types'
 
-// import { TodoItem } from '../todo-item'
-
 const TodoList = ({ children }) => {
+  console.log('🚀 ~ file: todo-list.jsx ~ line 5', 'Render TodoList')
+
   return (
     <section>
       <ul className={styles['todo-list-ul']}>{children}</ul>
@@ -12,8 +12,7 @@ const TodoList = ({ children }) => {
 }
 
 TodoList.propTypes = {
-  // children: PropTypes.arrayOf(PropTypes.instanceOf(TodoItem)),
-  children: PropTypes.element,
+  children: PropTypes.array,
 }
 
 export default TodoList

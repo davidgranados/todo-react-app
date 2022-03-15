@@ -3,7 +3,8 @@ import PropTypes from 'prop-types'
 
 import styles from './todo-item.module.css'
 
-const TodoItem = ({ text, completed = false }) => {
+const TodoItem = ({ text, onCheck, onDelete, completed = false }) => {
+  console.log('🚀 ~ file: todo-item.jsx ~ line 7', 'Render TodoItem')
   const checkIconClassName = classNames(styles['icon'], styles['icon-check'], {
     [styles['icon-check--active']]: completed,
   })
@@ -11,11 +12,12 @@ const TodoItem = ({ text, completed = false }) => {
     [styles['todo-item-p--completed']]: completed,
   })
   const deleteIconClassName = classNames(styles['icon'], styles['icon-delete'])
+
   const handleCheckIconClick = () => {
-    alert('Ya completaste el todo ' + text)
+    onCheck(text)
   }
   const handleDeleteIconClick = () => {
-    alert('Borraste el todo ' + text)
+    onDelete(text)
   }
   return (
     <li className={styles['todo-item']}>
@@ -32,6 +34,8 @@ const TodoItem = ({ text, completed = false }) => {
 
 TodoItem.propTypes = {
   text: PropTypes.string,
+  onCheck: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
   completed: PropTypes.bool,
 }
 
