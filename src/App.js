@@ -6,16 +6,26 @@ import { TodoList } from './todo-list'
 import { TodoItem } from './todo-item'
 import { CreateTodoButton } from './create-todo-button'
 
-const defaultTodos = [
-  { text: 'tarea 1', completed: false },
-  { text: 'tarea 2', completed: false },
-  { text: 'tarea 3', completed: true },
-]
+// const defaultTodos = [
+//   { text: 'tarea 1', completed: false },
+//   { text: 'tarea 2', completed: false },
+//   { text: 'tarea 3', completed: true },
+// ]
 
 function App() {
   console.log('🚀 ~ file: App.js ~ line 16', 'render app')
 
-  const [todos, setTodos] = useState(defaultTodos)
+  const localStorageTodos = localStorage.getItem('TODOS_V1')
+
+  let parsedTodos = []
+
+  if (!localStorageTodos) {
+    localStorage.setItem('TODOS_V1', JSON.stringify([]))
+  } else {
+    parsedTodos = JSON.parse(localStorageTodos)
+  }
+
+  const [todos, setTodos] = useState(parsedTodos)
   const [query, setQuery] = useState('')
 
   const completedTodos = todos.filter((todo) => todo.completed).length
@@ -30,22 +40,23 @@ function App() {
     )
   }
 
+  const saveTodos = (newTodos) => {
+    localStorage.setItem('TODOS_V1', JSON.stringify(newTodos))
+    setTodos(newTodos)
+  }
+
   const handleCheckTodo = (text) => {
     const todoIndex = todos.findIndex((todo) => todo.text === text)
-    setTodos((prevState) => {
-      const newTodos = [...prevState]
-      newTodos[todoIndex].completed = true
-      return newTodos
-    })
+    const newTodos = [...todos]
+    newTodos[todoIndex].completed = true
+    saveTodos(newTodos)
   }
 
   const handleDeleteTodo = (text) => {
     const todoIndex = todos.findIndex((todo) => todo.text === text)
-    setTodos((prevState) => {
-      const newTodos = [...prevState]
-      newTodos.splice(todoIndex, 1)
-      return newTodos
-    })
+    const newTodos = [...todos]
+    newTodos.splice(todoIndex, 1)
+    saveTodos(newTodos)
   }
 
   return (
