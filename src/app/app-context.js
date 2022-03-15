@@ -14,6 +14,7 @@ const TodoProvider = ({ children }) => {
   } = useLocalStorage('TODOS_V1', [])
 
   const [query, setQuery] = useState('')
+  const [openModal, setOpenModal] = useState(false)
 
   const completedTodos = todos.filter((todo) => todo.completed).length
   const totalTodos = todos.length
@@ -54,6 +55,8 @@ const TodoProvider = ({ children }) => {
         searchedTodos,
         handleCheckTodo,
         handleDeleteTodo,
+        openModal,
+        setOpenModal,
       }}
     >
       {children}
